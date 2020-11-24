@@ -1,16 +1,24 @@
 
 // -------------------------Getting HTML Elements-------------------------
+const startPart = document.getElementById('#startPart');
+const startBtn = document.querySelector('#startPart .btn-start');
 const huntingField = document.getElementById('huntingSquare');
-const duckShape = document.getElementById('duckShape');
+const duckShapeOne = document.getElementById('duckShapeOne');
+const duckShapeTwo = document.getElementById('duckShapeTwo');
 const duckOne = document.querySelector('.duckOne');
 const duckTwo = document.querySelector('.duckTwo');
+const score = document.querySelector('#scorePart .score');
+const bulletIcons = document.querySelector("#bulletPart .bullet");
+let animationDuckOne = "";
+let displayScore = 0;
 
-
+//------------- Create HTML elements
+let spanEl = document.createElement('span');
+// console.log(startPart.children);
 
 // ------------------------Generate random positions--------------------
 function generatePositionX(random){
     let x = Math.floor(Math.random()*random.clientWidth);
-    console.log(x);
     return x
 }
 function generatePositionY(random){
@@ -25,65 +33,88 @@ duckOne.style.left = `${generatePositionX(huntingField)}px`;
 duckTwo.style.bottom = "-100px";
 duckTwo.style.left = `${generatePositionX(huntingField)}px`;
 
-
-// // --------------------------Random Translate coordonate (transition)------------------
-// let translate3dValue = `translate3d(${generatePositionX(huntingField)}px, -${generatePositionY(huntingField)}px, 0)`;
-
-
-// // ----------------------------assign moving coordonate (transition)-----------------
-// function moving(){
-//     let width = 90;
-//     let id = setInterval(frame, 1000);
-//     function frame(){
-//         if (width==100){
-//             clearInterval(id);
-//         }else{
-//             console.log('yo');
-//             duckShape.style.transform = translate3dValue;
-//             width++;
-//         }
-//     }
-// }
-
-
 // ---------------Animate duck movment----------------
-let animationDuckOne = anime({
-    targets : '.duckOne',
-    keyframes : [
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField), transform: 'scaleX(-1)'},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField), transform: 'scaleX(-1)'},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField), transform: 'scaleX(-1)'},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField), transform: 'scaleX(-1)'},
-        {top:generatePositionY(huntingField), left:huntingField.clientWidth+150},
-    ],
-    duration: 30000,
-    easing: 'linear',
-    autoplay : false
+function animateDuckOne(){
+    animationDuckOne = anime({
+        targets : '.duckOne',
+        keyframes : [
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:huntingField.clientWidth+150},
+        ],
+        duration: 20000,
+        easing: 'linear',
+        autoplay : true
+    });
+}
+
+function animateDuckTwo(){
+    let animationDuckTwo = anime({
+        targets : '.duckTwo',
+        keyframes : [
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
+            {top:generatePositionY(huntingField), left:-150},
+        ],
+        duration: 20000,
+        easing: 'linear',
+        autoplay : true
+    });
+}
+
+
+// ---------------Set Score function------------
+function setScore(){
+    displayScore += 1000;
+    return displayScore;
+}
+    
+//---------------When click on Duck1-------------
+duckShapeOne.addEventListener("click", function clickOnDucks (){
+    let count =0;
+    if(count < 3){
+        bulletIcons.children[count] == "";
+        count++
+    }else{};
+    setScore();
+    duckShapeOne.style.transform = `translateY(${huntingField.clientHeight+150})`;
+    score.textContent = displayScore;
 });
-let animationDuckTwo = anime({
-    targets : '.duckTwo',
-    keyframes : [
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-        {top:generatePositionY(huntingField), left:-150},
-    ],
-    duration: 20000,
-    easing: 'linear',
-    autoplay : false
+// //---------------When click on Duck2-------------
+duckShapeTwo.addEventListener("click", function clickOnDucks (){
+    setScore();
+    score.textContent = displayScore;
+    bulletIcons.classList.remove("fas", "fa-meteor", "fa-2x");
 });
 
-duckShape.onclick = ()=> alert("Je t'ai eu");
+//--------------- Display Timer --------------
+function addTimer (){
+    startPart.appendChild(spanEl);
+    spanEl.classList.add("far", "fa-clock", "fa-3x");
+}
 
+//-------------When click on START------------
+startBtn.addEventListener("click", function startGame(){
+    displayScore = 0;
+    score.textContent = "0";
+    // startPart.removeChild(startPart.children[0]);
+    animateDuckOne();
+    animateDuckTwo();
+
+
+});
 

@@ -20,14 +20,22 @@
 }
 
 #huntingSquare{
-    background-color: rgba(157, 228, 154, 0.4);
+    /* background-color: rgba(157, 228, 154, 0.4); */
     width: 100%;
     height: 80%;
     cursor: url(./images/mire_img.png), auto;
     position: relative;
 }
 
-#duckShape{
+#duckShapeOne{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    background-image: url(./images/gif_duck.gif);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+#duckShapeTwo{
     width: 100px;
     height: 100px;
     position: absolute;
@@ -53,7 +61,7 @@
 } */
 
 #displayItems{
-    background-color: rgba(9, 161, 4, 0.4);
+    /* background-color: rgba(9, 161, 4, 0.4); */
     width: 100%;
     height: 20%;
     display: flex;
