@@ -5,17 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duck Hunt Game</title>
     <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-z4OUqw38qNLpn1libAN9BsoDx6nbNFio5lA6CuTp9NlK83b89hgyCVq+N5FdBJptINztxn1Z3SaKSKUS5UP60Q==" crossorigin="anonymous"></script>
     <script type="module" src="./JS/index.js"></script>
 </head>
 <body>
     <section id="globalContainer">
             <div id="huntingSquare">
-                <div id="duckShape"></div>
+                <div id="duckShape" class="duckOne"></div>
+                <div id="duckShape" class="duckTwo"></div>
             </div>
-            <div id="scorePart">
-                <div class="score">1500</div>
-                <p>Score</p>
+            <div id="displayItems">
+                <div id="scorePart" class="formatCommun">
+                    <div class="score">0</div>
+                    <p>Score</p>
+                </div>
+                <div id="startPart">
+                    <button class="btn-start">START</button>
+                </div>
+                <div id="bulletPart" class="formatCommun">
+                    <div class="bullet">
+                        <span class="fas fa-meteor fa-2x"></span> 
+                        <span class="fas fa-meteor fa-2x"></span>
+                        <span class="fas fa-meteor fa-2x"></span> 
+                    </div>
+                    <p>Shoot remaining</p>
+                </div>
             </div>
+            
     </section>
 </body>
 </html>

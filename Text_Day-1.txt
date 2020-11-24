@@ -1,0 +1,1 @@
+Jour 1 : J'ai trouver comment débuter le projet en important le BG et en insérant quelques tests (attribution aléatoire d'une position à un objet etc...). "Début assez compliqué".
