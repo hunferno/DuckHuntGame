@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     overflow: hidden;
+    font-family: 'Press Start 2P', cursive;
 }
 
 #globalContainer{
@@ -27,25 +30,18 @@
     position: relative;
 }
 
-#duckShapeOne{
+#huntingSquare .duck{
     width: 100px;
     height: 100px;
     position: absolute;
     background-image: url(./images/gif_duck.gif);
     background-size: contain;
     background-repeat: no-repeat;
-}
-#duckShapeTwo{
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    background-image: url(./images/gif_duck.gif);
-    background-size: contain;
-    background-repeat: no-repeat;
-    /* transition: 15s ease-out; */
+    /* transition: 5s ease-out; */
     /* animation-name: duckMoving;
     animation-duration: 5s; */
 }
+
 /* @keyframes duckMoving {
     00% { top: 100%; left: 35%; }
     10% { top: 19%; left: 66%; }
@@ -79,7 +75,19 @@
     color: whitesmoke;
 }
 
+#startPart {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 #startPart .btn-start{
     padding: 10px 20px;
     border-radius: 5px;
+    position: absolute;
+}
+#startPart .far.fa-clock.fa-3x{
+    visibility: hidden;
+    color: whitesmoke;
+    position: absolute;
 }
