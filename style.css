@@ -29,6 +29,25 @@
     cursor: url(./images/mire_img.png), auto;
     position: relative;
 }
+#huntingSquare .title{
+    position: relative;
+    color: whitesmoke;
+    font-size: 4rem;
+    top: 50%;
+    text-align: center;
+    /* transform: scale3d(5rem 5rem 0); */
+    animation: animate 3s ease-out infinite alternate-reverse;
+}
+@keyframes animate{
+    0%{
+        color: rgb(243, 0, 243);
+        transform: scaleX(1.2);
+    }
+    100%{
+        color: rgb(223, 238, 14);
+        transform: scaleY(0.5);
+    }
+}
 
 #huntingSquare .duck{
     width: 100px;
@@ -81,11 +100,15 @@
     justify-content: center;
     align-items: center;
 }
-#startPart .btn-start{
+#startPart .btn-game{
     padding: 10px 20px;
     border-radius: 5px;
     position: absolute;
 }
+#startPart .btn-restart{
+    visibility: hidden;
+}
+
 #startPart .far.fa-clock.fa-3x{
     visibility: hidden;
     color: whitesmoke;
