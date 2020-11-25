@@ -12,18 +12,27 @@ const title = document.querySelector('#huntingSquare .title');
 const bulletIcons = document.querySelector("#bulletPart .bullet");
 const ducksTogether = document.querySelectorAll("#huntingSquare .duck");
 
-
 //------------- Create HTML elements
-let spanEl = document.createElement('span');
-// console.log(startPart.children);
+const spanElOne = document.createElement('span');
+const spanElTwo = document.createElement('span');
+const spanElThree = document.createElement('span');
+spanElOne.classList.add("fas", "fa-meteor", "fa-2x")
+spanElTwo.classList.add("fas", "fa-meteor", "fa-2x")
+spanElThree.classList.add("fas", "fa-meteor", "fa-2x")
+
 
 // ------------------------- Initialize ducks position--------------------
-duckShapeOne.style.bottom = "-100px";
-duckShapeOne.style.left = `${generatePositionX(huntingField)}px`;
-duckShapeTwo.style.bottom = "-100px";
-duckShapeTwo.style.left = `${generatePositionX(huntingField)}px`;
+function initDuckPos(){
+    duckShapeOne.style.bottom = "-100px";
+    duckShapeOne.style.left = `${generatePositionX(huntingField)}px`;
+    duckShapeTwo.style.bottom = "-100px";
+    duckShapeTwo.style.left = `${generatePositionX(huntingField)}px`;
+}
+initDuckPos();
 
 //-------------------------Initialize variables---------------------------
+let animationDuck = "";
+let refreshTimer = 0;
 let displayScore = 0;
 let time = 19;
 let duckAlive = 2;
@@ -31,7 +40,7 @@ let bulletRemaining = 3;
 
 //--------------------Animation with animeJS-------------------
 function animation(element){
-    let animationDuckOne = anime({
+    animationDuck = anime({
         targets : element,
         keyframes : [
             {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
@@ -43,7 +52,7 @@ function animation(element){
             {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
             {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
             {top:generatePositionY(huntingField), left:generatePositionX(huntingField)},
-            {top:generatePositionY(huntingField), left:huntingField.clientWidth+150},
+            {top:generatePositionY(huntingField), left:huntingField.clientWidth},
         ],
         duration: 20000,
         easing: 'linear',
@@ -108,22 +117,40 @@ function updateTimer (){
 
 //---------------------When we Loose----------------
 function looseGame() {
-    title.innerHTML = "YOU LOOOOOOOSE";
+    title.innerHTML = "YOU LOOOOOSE";
     title.style.visibility = "visible";
     chrono.style.visibility = "hidden";
     restartBtn.style.visibility = "visible";
+    // huntingField.clientWidth+150
+    duckShapeOne.style.transform = `translateX(${huntingField.clientWidth+150}px)`;
+    duckShapeOne.style.transition = `2s ease-out`;
+    duckShapeTwo.style.transform = `translateX(-${huntingField.clientWidth+150}px)`;
+    duckShapeTwo.style.transition = `2s ease-out`;
 }
 
 //-------------------When we Win--------------------
 
-//-------------When click on playing area-----------------
-// function gameArea (){
-//     huntingField.addEventListener("click", function(eachClick){
-//         let counter = 0;
-//         if (let i =0; i<bulletIcons.length; i++)
-//     });
-// }
 
+//-------------When click on playing area-----------------
+function gameAreaOnclick(){
+    huntingField.addEventListener("click", function(){
+        bulletRemaining--;
+        bulletIcons.removeChild(bulletIcons.firstElementChild);
+        conditionForLoose();
+    });
+}
+
+//-------------Condition for loose------------------
+function conditionForLoose(){
+    if(bulletRemaining === 0 && duckAlive){
+        looseGame();
+        clearInterval(refreshTimer);
+        chrono.innerHTML = `00:20`;
+        animationDuck.restart;
+    }else{
+        console.log(`Encore ${bulletRemaining} coups restant`);
+    } 
+}
 
 //---------------When click on Duck1-------------
 duckShapeOne.addEventListener("click", function clickOnDucks (){
@@ -131,18 +158,20 @@ duckShapeOne.addEventListener("click", function clickOnDucks (){
     setScore();
     killDuckOne();
     displayScoreContent(score);
+    conditionForLoose();
 });
-// //---------------When click on Duck2-------------
+
+//---------------When click on Duck2-------------
 duckShapeTwo.addEventListener("click", function clickOnDucks (){
     bulletIcons.removeChild(bulletIcons.firstElementChild);
     setScore();
     killDuckTwo();
     displayScoreContent(score);
+    conditionForLoose();
     // bulletIcons.children.classList.remove("fas", "fa-meteor", "fa-2x");
 });
 
-
-//-------------When click on START------------
+//-------------When click on START btn------------
 startBtn.addEventListener("click", function startGame(){
     displayScore = 0;
     score.textContent = "0";
@@ -151,12 +180,25 @@ startBtn.addEventListener("click", function startGame(){
     title.style.visibility = "hidden";
     animation("#duckShapeOne");
     animation("#duckShapeTwo");
-    const countingDown = setInterval(updateTimer,1000);
+    gameAreaOnclick();
+    refreshTimer = setInterval(updateTimer,1000);
 });
 
-if(1+2==3){
-    console.log("You Loose");
-}
-
-
-
+//------------When click on Restart btn-----------
+restartBtn.addEventListener("click", function restartGame(){
+    bulletRemaining = 3;
+    duckAlive = 2;
+    time = 19;
+    displayScore = 0;
+    score.textContent = "0";
+    bulletIcons.appendChild(spanElOne);
+    bulletIcons.appendChild(spanElTwo);
+    bulletIcons.appendChild(spanElThree);
+    restartBtn.style.visibility = "hidden";
+    chrono.style.visibility = "visible";
+    title.style.visibility = "hidden";
+    animation("#duckShapeOne");
+    animation("#duckShapeTwo");
+    gameAreaOnclick();
+    setInterval(updateTimer,1000);
+})

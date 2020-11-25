@@ -28,6 +28,7 @@
     height: 80%;
     cursor: url(./images/mire_img.png), auto;
     position: relative;
+    z-index: 0;
 }
 #huntingSquare .title{
     position: relative;
@@ -56,6 +57,7 @@
     background-image: url(./images/gif_duck.gif);
     background-size: contain;
     background-repeat: no-repeat;
+    z-index: 5;
     /* transition: 5s ease-out; */
     /* animation-name: duckMoving;
     animation-duration: 5s; */
@@ -113,4 +115,10 @@
     visibility: hidden;
     color: whitesmoke;
     position: absolute;
+}
+
+#bulletPart .bullet{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
 }
