@@ -10,6 +10,7 @@ const score = document.querySelector("#scorePart .score");
 const title = document.querySelector("#huntingSquare .title");
 const bulletIcons = document.querySelector("#bulletPart .bullet");
 const ducksTogether = document.querySelectorAll("#huntingSquare .duck");
+const description = document.querySelector("#huntingSquare .description");
 
 //------------- Create HTML elements
 const spanElOne = document.createElement("span");
@@ -18,6 +19,18 @@ const spanElThree = document.createElement("span");
 spanElOne.classList.add("fas", "fa-meteor", "fa-2x");
 spanElTwo.classList.add("fas", "fa-meteor", "fa-2x");
 spanElThree.classList.add("fas", "fa-meteor", "fa-2x");
+const duckOne = document.createElement("div");
+const duckTwo = document.createElement("div");
+duckOne.classList.add("duck");
+duckTwo.classList.add("duck");
+duckOne.id = "duckShapeOne";
+duckTwo.id = "duckShapeTwo";
+
+//------------------------Create the 2 first ducks------------------
+function addingDucks() {
+  huntingSquare.appendChild(duckOne);
+  huntingSquare.appendChild(duckTwo);
+}
 
 // ------------------------- Initialize ducks position--------------------
 function initDuckPos() {
@@ -29,8 +42,15 @@ function initDuckPos() {
 initDuckPos();
 
 //-------------------------Initialize variables---------------------------
-let animationDuck = {};
-let refreshTimer = 0;
+let animationDuck;
+let refreshTimerStart;
+let refreshTimerRestart;
+let refreshTimerWin;
+let refreshCondFLooseRestart;
+let refreshCondFLooseStart;
+let refreshCondFLooseWin;
+let refreshRound;
+let mySound;
 let displayScore = 0;
 let time = 19;
 let duckAlive = 2;
@@ -85,6 +105,13 @@ function animation(element) {
   });
 }
 
+//-----------------ADDING BULLET------------------
+function addingBullets() {
+  bulletIcons.appendChild(spanElOne);
+  bulletIcons.appendChild(spanElTwo);
+  bulletIcons.appendChild(spanElThree);
+}
+
 // ------------------------Generate random positions--------------------
 function generatePositionX(random) {
   let x = Math.floor(Math.random() * random.clientWidth);
@@ -107,10 +134,8 @@ function displayScoreContent(container) {
 }
 
 //-----------------Killing ducks-----------------
-// kill
 function kill(duck) {
-  duck.style.transform = `translateY(1000px)`;
-  duck.style.transition = `2s ease-out`;
+  huntingField.removeChild(duck);
 }
 
 //--------------- Uptade Counter Timer --------------
@@ -124,39 +149,35 @@ function looseTime() {
   time--;
 }
 
-//-------------------Condition for Win--------------------
-function conditionForWin() {
-  // if ((bulletRemaining === 0 && duckAlive >= 1) || time === -1) {
-  //   looseGame();
-  //   clearInterval(refreshTimer);
-  //   chrono.innerHTML = `00:20`;
-  // } else {
-  //   console.log(`Il reste encore ${bulletRemaining} coups`);
-  // }
-}
-
-//-------------------When we Win--------------------
-function winGame() {
-  //   title.innerHTML = "YOU LOOOOOSE";
-  //   title.style.visibility = "visible";
-  //   chrono.style.visibility = "hidden";
-  //   restartBtn.style.visibility = "visible";
-  //   duckShapeOne.style.transform = `translateX(${
-  //     huntingField.clientWidth + 150
-  //   }px)`;
-  //   duckShapeOne.style.transition = `2s ease-out`;
-  //   duckShapeTwo.style.transform = `translateX(-${
-  //     huntingField.clientWidth + 150
-  //   }px)`;
-  //   duckShapeTwo.style.transition = `2s ease-out`;
+//-------------RESET ELEMENTS---------------
+function resetElements() {
+  bulletRemaining = 3;
+  duckAlive = 2;
+  time = 19;
 }
 
 //-------------Condition for loose------------------
 function conditionForLoose() {
-  if ((bulletRemaining === 0 && duckAlive >= 1) || time === -1) {
-    looseGame();
-    clearInterval(refreshTimer);
+  if ((bulletRemaining == 0 && duckAlive >= 1) || time == -1) {
+    clearInterval(refreshTimerStart);
+    clearInterval(refreshTimerRestart);
+    clearInterval(refreshTimerWin);
+    clearInterval(refreshCondFLooseRestart);
+    clearInterval(refreshCondFLooseStart);
+    clearInterval(refreshCondFLooseWin);
     chrono.innerHTML = `00:20`;
+    playSoundLoose();
+    mySound.pause();
+    looseGame();
+  } else if (time && duckAlive == 0) {
+    clearInterval(refreshTimerStart);
+    clearInterval(refreshTimerRestart);
+    clearInterval(refreshTimerWin);
+    clearInterval(refreshCondFLooseRestart);
+    clearInterval(refreshCondFLooseStart);
+    clearInterval(refreshCondFLooseWin);
+    chrono.innerHTML = `00:20`;
+    winGame();
   } else {
     console.log(`Il reste encore ${bulletRemaining} coups`);
   }
@@ -168,71 +189,123 @@ function looseGame() {
   title.style.visibility = "visible";
   chrono.style.visibility = "hidden";
   restartBtn.style.visibility = "visible";
-
-  duckShapeOne.style.transform = `translateX(${
-    huntingField.clientWidth + 150
-  }px)`;
-  duckShapeOne.style.transition = `2s ease-out`;
-  duckShapeTwo.style.transform = `translateX(-${
-    huntingField.clientWidth + 150
-  }px)`;
-  duckShapeTwo.style.transition = `2s ease-out`;
+  translateDuck(duckShapeOne);
+  translateDuck(duckShapeTwo);
+  //   translateDuck(duckOne);
+  //   translateDuck(duckTwo);
 }
 
+//-------------------When we Win--------------------
+function winGame() {
+  title.innerHTML = "NEXT ROUND";
+  title.style.visibility = "visible";
+  refreshRound = setTimeout(function () {
+    title.style.visibility = "hidden";
+    resetElements();
+    initDuckPos();
+    addingBullets();
+    addingDucks();
+    animation("#duckShapeOne");
+    animation("#duckShapeTwo");
+    gameAreaOnclick();
+    refreshTimerWin = setInterval(looseTime, 1000);
+    refreshCondFLooseWin = setInterval(conditionForLoose, 500);
+  }, 3000);
+
+  //   duckShapeOne.style.transform = `translateX(${
+  //     huntingField.clientWidth + 150
+  //   }px)`;
+  //   duckShapeOne.style.transition = `2s ease-out`;
+  //   duckShapeTwo.style.transform = `translateX(-${
+  //     huntingField.clientWidth + 150
+  //   }px)`;
+  //   duckShapeTwo.style.transition = `2s ease-out`;
+}
+
+function translateDuck(duck) {
+  duck.style.transform = `translateX(${huntingField.clientWidth + 150}px)`;
+  duck.style.transition = `2s ease-out`;
+}
+
+duckShapeOne.onclick = () => duckTouch(duckShapeOne);
+duckShapeTwo.onclick = () => duckTouch(duckShapeTwo);
+duckOne.onclick = () => duckTouch(duckOne);
+duckTwo.onclick = () => duckTouch(duckTwo);
+
+//-------------For loosing bullet----------------
 function looseBullet() {
   bulletIcons.removeChild(bulletIcons.firstElementChild);
   bulletRemaining--;
 }
 
-[duckShapeOne, duckShapeTwo].forEach((duck) => {
-  duck.onclick = () => {
-    looseBullet();
-    setScore();
-    kill(duck);
-    displayScoreContent(score);
-    conditionForLoose();
-  };
-});
+//-------------Duck touch----------------
+function duckTouch(duck) {
+  duckAlive--;
+  playSoundShoot();
+  looseBullet();
+  setScore();
+  kill(duck);
+  displayScoreContent(score);
+  conditionForLoose();
+  console.log(duckAlive);
+}
 
 //-------------When click on playing area-----------------
 function gameAreaOnclick() {
   huntingField.onclick = (evt) => {
     if (!evt.target.classList.contains("duck")) looseBullet();
+    playSoundShoot();
     conditionForLoose();
   };
 }
 
 //-------------When click on START btn------------
-startBtn.addEventListener("click", function startGame() {
+startBtn.addEventListener("click", function () {
   displayScore = 0;
   score.textContent = "0";
   startBtn.style.visibility = "hidden";
   chrono.style.visibility = "visible";
   title.style.visibility = "hidden";
+  description.style.visibility = "hidden";
+  //   initDuckPos();
+  addingBullets();
   animation("#duckShapeOne");
   animation("#duckShapeTwo");
   gameAreaOnclick();
-  refreshTimer = setInterval(looseTime, 1000);
-  setInterval(conditionForLoose, 500);
+  refreshTimerStart = setInterval(looseTime, 1000);
+  refreshCondFLooseStart = setInterval(conditionForLoose, 500);
+  playSoundGame();
 });
 
+function playSoundGame() {
+  mySound = new Audio("../sounds/gameMusic.mp3");
+  mySound.play();
+  mySound.loop = true;
+}
+function playSoundShoot() {
+  const mySoundShoot = new Audio("../sounds/shoot.wav");
+  mySoundShoot.play();
+}
+function playSoundLoose() {
+  const mySoundLoose = new Audio("../sounds/looser.wav");
+  mySoundLoose.play();
+}
 //------------When click on Restart btn-----------
-restartBtn.addEventListener("click", function restartGame() {
-  initDuckPos();
-  bulletRemaining = 3;
-  duckAlive = 2;
-  time = 19;
+restartBtn.addEventListener("click", function () {
+  playSoundGame();
+  //   document.location.reload();
   displayScore = 0;
   score.textContent = "0";
-  bulletIcons.appendChild(spanElOne);
-  bulletIcons.appendChild(spanElTwo);
-  bulletIcons.appendChild(spanElThree);
   restartBtn.style.visibility = "hidden";
   chrono.style.visibility = "visible";
   title.style.visibility = "hidden";
+  resetElements();
+  addingBullets();
+  addingDucks();
+  initDuckPos();
   animation("#duckShapeOne");
   animation("#duckShapeTwo");
   gameAreaOnclick();
-  refreshTimer = setInterval(looseTime, 1000);
-  setInterval(conditionForLoose, 500);
+  refreshTimerRestart = setInterval(looseTime, 1000);
+  refreshCondFLooseRestart = setInterval(conditionForLoose, 500);
 });

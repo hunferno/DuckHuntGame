@@ -28,7 +28,23 @@
     height: 80%;
     cursor: url(./images/mire_img.png), auto;
     position: relative;
-    z-index: 0;
+}
+#huntingSquare .description{
+    position: relative;
+    color: whitesmoke;
+    font-size: 1rem;
+    top: 60%;
+    text-align: center;
+    line-height: 1.5;
+    animation: description 5s ease-out infinite alternate-reverse;
+}
+@keyframes description{
+    0%{
+        color: rgb(253, 24, 3);
+    }
+    100%{
+        color: rgb(39, 28, 37);
+    }
 }
 #huntingSquare .title{
     position: relative;
@@ -57,7 +73,6 @@
     background-image: url(./images/gif_duck.gif);
     background-size: contain;
     background-repeat: no-repeat;
-    z-index: 5;
     /* transition: 5s ease-out; */
     /* animation-name: duckMoving;
     animation-duration: 5s; */
