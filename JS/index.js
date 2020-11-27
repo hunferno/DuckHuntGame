@@ -35,6 +35,7 @@ let time = 19;
 let duckAlive = 2;
 let bulletRemaining = 3;
 let intervalID;
+let difficulty = 0;
 //------------------------Create 2 ducks------------------
 function addingDucks() {
   huntingSquare.appendChild(duckOne);
@@ -155,16 +156,17 @@ function resetElements() {
 function conditionForLoose() {
   if ((bulletRemaining == 0 && duckAlive >= 1) || time < 0) {
     clearInterval(intervalID);
-
+    difficulty = 0;
     console.log("loose");
-    chrono.innerHTML = `00:20`;
+    chrono.innerHTML = ``;
     playSoundLoose();
     mySound.pause();
     looseGame();
   } else if (time > 0 && duckAlive == 0) {
     clearInterval(intervalID);
-    chrono.innerHTML = `00:20`;
+    chrono.innerHTML = ``;
     console.log("win");
+    difficulty += 3;
     winGame();
   } else {
     console.log(`Il reste encore ${bulletRemaining} coups`);
@@ -187,15 +189,20 @@ function looseGame() {
 function winGame() {
   title.innerHTML = "NEXT ROUND";
   title.style.visibility = "visible";
+  resetElements();
   refreshRound = setTimeout(function () {
     title.style.visibility = "hidden";
-    resetElements();
     initDuckPos();
     addingBullets();
     addingDucks();
     animation("#duckShapeOne");
     animation("#duckShapeTwo");
     gameAreaOnclick();
+    if (difficulty > 15) {
+      time = time - 15;
+    } else {
+      time = time - difficulty;
+    }
     clearInterval(intervalID);
     intervalID = setInterval(looping, 1000);
   }, 3000);
