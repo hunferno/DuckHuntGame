@@ -135,7 +135,6 @@ function kill(duck) {
 
 //--------------- Uptade Counter Timer --------------
 function looseTime() {
-  console.trace();
   if (time < 10) {
     time = "0" + time;
   } else {
@@ -157,7 +156,6 @@ function conditionForLoose() {
   if ((bulletRemaining == 0 && duckAlive >= 1) || time < 0) {
     clearInterval(intervalID);
     difficulty = 0;
-    console.log("loose");
     chrono.innerHTML = ``;
     playSoundLoose();
     mySound.pause();
@@ -165,7 +163,6 @@ function conditionForLoose() {
   } else if (time > 0 && duckAlive == 0) {
     clearInterval(intervalID);
     chrono.innerHTML = ``;
-    console.log("win");
     difficulty += 3;
     winGame();
   } else {
@@ -233,7 +230,6 @@ function duckTouch(duck) {
   kill(duck);
   displayScoreContent(score);
   conditionForLoose();
-  console.log(duckAlive);
 }
 
 function looping(params) {
@@ -269,16 +265,16 @@ startBtn.addEventListener("click", function () {
 });
 
 function playSoundGame() {
-  mySound = new Audio("../sounds/gameMusic.mp3");
+  mySound = new Audio("./sounds/gameMusic.mp3");
   mySound.play();
   mySound.loop = true;
 }
 function playSoundShoot() {
-  const mySoundShoot = new Audio("../sounds/shoot.wav");
+  const mySoundShoot = new Audio("./sounds/shoot.wav");
   mySoundShoot.play();
 }
 function playSoundLoose() {
-  const mySoundLoose = new Audio("../sounds/looser.wav");
+  const mySoundLoose = new Audio("./sounds/looser.wav");
   mySoundLoose.play();
 }
 //------------When click on Restart btn-----------
