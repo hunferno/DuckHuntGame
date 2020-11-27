@@ -26,7 +26,16 @@ duckTwo.classList.add("duck");
 duckOne.id = "duckShapeOne";
 duckTwo.id = "duckShapeTwo";
 
-//------------------------Create the 2 first ducks------------------
+//-------------------------Initialize variables---------------------------
+let animationDuck;
+let refreshRound;
+let mySound;
+let displayScore = 0;
+let time = 19;
+let duckAlive = 2;
+let bulletRemaining = 3;
+let intervalID;
+//------------------------Create 2 ducks------------------
 function addingDucks() {
   huntingSquare.appendChild(duckOne);
   huntingSquare.appendChild(duckTwo);
@@ -40,21 +49,6 @@ function initDuckPos() {
   duckShapeTwo.style.left = `${generatePositionX(huntingField)}px`;
 }
 initDuckPos();
-
-//-------------------------Initialize variables---------------------------
-let animationDuck;
-let refreshTimerStart;
-let refreshTimerRestart;
-let refreshTimerWin;
-let refreshCondFLooseRestart;
-let refreshCondFLooseStart;
-let refreshCondFLooseWin;
-let refreshRound;
-let mySound;
-let displayScore = 0;
-let time = 19;
-let duckAlive = 2;
-let bulletRemaining = 3;
 
 //--------------------Animation with animeJS-------------------
 function animation(element) {
@@ -140,6 +134,7 @@ function kill(duck) {
 
 //--------------- Uptade Counter Timer --------------
 function looseTime() {
+  console.trace();
   if (time < 10) {
     time = "0" + time;
   } else {
@@ -158,25 +153,18 @@ function resetElements() {
 
 //-------------Condition for loose------------------
 function conditionForLoose() {
-  if ((bulletRemaining == 0 && duckAlive >= 1) || time == -1) {
-    clearInterval(refreshTimerStart);
-    clearInterval(refreshTimerRestart);
-    clearInterval(refreshTimerWin);
-    clearInterval(refreshCondFLooseRestart);
-    clearInterval(refreshCondFLooseStart);
-    clearInterval(refreshCondFLooseWin);
+  if ((bulletRemaining == 0 && duckAlive >= 1) || time < 0) {
+    clearInterval(intervalID);
+
+    console.log("loose");
     chrono.innerHTML = `00:20`;
     playSoundLoose();
     mySound.pause();
     looseGame();
-  } else if (time && duckAlive == 0) {
-    clearInterval(refreshTimerStart);
-    clearInterval(refreshTimerRestart);
-    clearInterval(refreshTimerWin);
-    clearInterval(refreshCondFLooseRestart);
-    clearInterval(refreshCondFLooseStart);
-    clearInterval(refreshCondFLooseWin);
+  } else if (time > 0 && duckAlive == 0) {
+    clearInterval(intervalID);
     chrono.innerHTML = `00:20`;
+    console.log("win");
     winGame();
   } else {
     console.log(`Il reste encore ${bulletRemaining} coups`);
@@ -208,18 +196,9 @@ function winGame() {
     animation("#duckShapeOne");
     animation("#duckShapeTwo");
     gameAreaOnclick();
-    refreshTimerWin = setInterval(looseTime, 1000);
-    refreshCondFLooseWin = setInterval(conditionForLoose, 500);
+    clearInterval(intervalID);
+    intervalID = setInterval(looping, 1000);
   }, 3000);
-
-  //   duckShapeOne.style.transform = `translateX(${
-  //     huntingField.clientWidth + 150
-  //   }px)`;
-  //   duckShapeOne.style.transition = `2s ease-out`;
-  //   duckShapeTwo.style.transform = `translateX(-${
-  //     huntingField.clientWidth + 150
-  //   }px)`;
-  //   duckShapeTwo.style.transition = `2s ease-out`;
 }
 
 function translateDuck(duck) {
@@ -250,6 +229,11 @@ function duckTouch(duck) {
   console.log(duckAlive);
 }
 
+function looping(params) {
+  looseTime();
+  conditionForLoose();
+}
+
 //-------------When click on playing area-----------------
 function gameAreaOnclick() {
   huntingField.onclick = (evt) => {
@@ -267,13 +251,13 @@ startBtn.addEventListener("click", function () {
   chrono.style.visibility = "visible";
   title.style.visibility = "hidden";
   description.style.visibility = "hidden";
-  //   initDuckPos();
+  initDuckPos();
   addingBullets();
   animation("#duckShapeOne");
   animation("#duckShapeTwo");
   gameAreaOnclick();
-  refreshTimerStart = setInterval(looseTime, 1000);
-  refreshCondFLooseStart = setInterval(conditionForLoose, 500);
+  clearInterval(intervalID);
+  intervalID = setInterval(looping, 1000);
   playSoundGame();
 });
 
@@ -306,6 +290,6 @@ restartBtn.addEventListener("click", function () {
   animation("#duckShapeOne");
   animation("#duckShapeTwo");
   gameAreaOnclick();
-  refreshTimerRestart = setInterval(looseTime, 1000);
-  refreshCondFLooseRestart = setInterval(conditionForLoose, 500);
+  clearInterval(intervalID);
+  intervalID = setInterval(looping, 1000);
 });

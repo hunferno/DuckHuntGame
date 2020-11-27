@@ -1,0 +1,11 @@
+Jour 3 : Problèmes rencontrés :
+
+1 - Lorsque je clique sur un duck, il y a 2 balles qui disparaissent à cause du fait que j'ai mis un onclick sur les ducks et aussi la zone de chasse. le fait est que les ducks sont dans la zone de chasse alors...
+
+2 - Je n'arrive pas à réinisialiser les positions des duck après avoir perdu.
+
+3 - Les balles disparaissent avec +1 à chaque restart game.
+
+4 - Mes animations rentrent dans une boucle qui me casse le jeu.
+
+6 - cette boucle engendre la multiplication des ducks.
